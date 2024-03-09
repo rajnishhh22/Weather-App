@@ -151,9 +151,12 @@ display: none;
 }
 
 /* Weather-Info */
+.userInfoContainer.active{
+    display: flex;
+}
 .userInfoContainer{
     margin: 50px 0px;
-    display: flex;
+    display: none;
     flex-direction: column;
     justify-content: center;
     align-items: center;
@@ -191,6 +194,7 @@ p[data-weatherTemp]{
     font-weight: 700;
 }
 
+
 .Parameter-container{
     margin-top: 30px;
     display: flex;
@@ -223,3 +227,13 @@ p[data-weatherTemp]{
     font-weight: 200;
 }
 
+.errorBlock{
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.4rem;
+}
+.errorBlock.active{
+    display: flex;
+}

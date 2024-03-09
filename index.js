@@ -4,12 +4,11 @@ const grantAccess = document.querySelector(".grantAccess-container")
 const searchForm = document.querySelector(".searchWeather-container")
 const loading = document.querySelector(".loading-container")
 const weatherInfoCont = document.querySelector(".userInfoContainer")
-
+const errorhandle = document.querySelector(".errorBlock")
 let currentTab = userTab;
 const APIkey = '659169c7691bc1a15f9afd6b63b52d00';
 currentTab.classList.add("currentTab")
-
-
+getfromSessionStorage()
 
 
 function switchTab(clickedTab){
@@ -25,6 +24,7 @@ function switchTab(clickedTab){
         // make visible to search form but we to invisible all other 
         searchForm.classList.add("active")
         grantAccess.classList.remove('active')
+
         weatherInfoCont.classList.remove('active')
     }
     else{
@@ -55,7 +55,9 @@ function getfromSessionStorage(){
         grantAccess.classList.add("active");
     }
     else{
-        const cordinates= JSON.parse();
+        // imp****
+        const cordinates= JSON.parse(local);
+       
         fetchuserWeatherInfo(cordinates)
     }
 }
@@ -71,11 +73,12 @@ async function fetchuserWeatherInfo(cordinates){
 
         loading.classList.remove("active")
         weatherInfoCont.classList.add("active")
-
+        
         renderWeather(data)
     }
     catch(err){
-        
+        loading.classList.remove("active")
+        errorhandle.classList.add("active")
     }
 }
 
@@ -109,9 +112,10 @@ function renderWeather(data){
 function getlocation(){
     if(navigator.geolocation){
         navigator.geolocation.getCurrentPosition(showPosition)
+        
     }
     else{
-
+      
     }
 }
 
@@ -143,6 +147,7 @@ searchButton.addEventListener("click",(e)=>{
 
 })
 
+// *****
 async function fetchSearchWeatherInfo(city){
     loading.classList.add("active")
     weatherInfoCont.classList.remove("active")
@@ -150,12 +155,18 @@ async function fetchSearchWeatherInfo(city){
     try{
         const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIkey}&units=metric`);
         const data = await response.json();
+        if (!data.sys) {
+            throw data;
+          }
+        console.log(data)
         loading.classList.remove("active")
         weatherInfoCont.classList.add("active")
         renderWeather(data)
     }
-    catch(err){
-
+    catch(error){
+        loading.classList.remove("active")
+        errorhandle.classList.add("active")
+      
     }
     
 
