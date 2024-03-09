@@ -66,7 +66,7 @@ async function fetchuserWeatherInfo(cordinates){
     loading.classList.add("active")
 
     try{
-        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${APIkey}`)
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${APIkey}&units=metric`)
         let data = await response.json()
 
         loading.classList.remove("active")
@@ -83,7 +83,7 @@ function renderWeather(data){
     let name = document.querySelector("[data-cityName]")
     let flag = document.querySelector("[data-countryFlag]")
     let weatherDesc = document.querySelector("[data-weatherDesc]")
-    let weatherSymbol = document.querySelector("[ data-weatherIcon]")
+    let weatherSymbol = document.querySelector("[data-weatherIcon]")
     let temp = document.querySelector("[data-weatherTemp]")
     
     let windspeed =document.querySelector("[data-windspeed]")
@@ -92,15 +92,17 @@ function renderWeather(data){
 
     name.innerText = data?.name
     console.log(name)
-    // flag.src = `https://flagcdn.com/144x108/${`weatherInfo?.sys?.country.toLowerCase()`}.png`;
+    flag.src = `https://flagcdn.com/144x108/${data?.sys?.country.toLowerCase()}.png`;
+    console.log(flag)
     weatherDesc.innerText = data?.weather?.[0]?.description
     console.log(weatherDesc)
-    // weatherSymbol.src=`https://openweathermap.org/img/w/${weatherInfo?.weather?.[0]?.icon}.png`;
+    weatherSymbol.src = `https://openweathermap.org/img/w/${data?.weather?.[0]?.icon}.png`
     temp.textContent =  `${data?.main?.temp} °C`
     console.log(temp)
     windspeed.innerText = `${data?.wind?.speed}m/s`
     humidity.innerText = `${data?.main?.humidity}%`
-    clouds.innerText = `${data?.main?.clouds?.all}%`
+    clouds.innerText = `${data?.clouds?.all}%`
+    // console.log(clouds);
 
 }
 
@@ -146,7 +148,7 @@ async function fetchSearchWeatherInfo(city){
     weatherInfoCont.classList.remove("active")
     grantAccess.classList.remove("active")
     try{
-        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIkey}`);
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIkey}&units=metric`);
         const data = await response.json();
         loading.classList.remove("active")
         weatherInfoCont.classList.add("active")
